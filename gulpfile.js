@@ -5,8 +5,7 @@ var autoprefixer    = require('gulp-autoprefixer');
 var concat          = require('gulp-concat');
 var minifyCss       = require('gulp-minify-css');
 
-var browserSync     = require('browser-sync');
-var reload          = browserSync.reload;
+var livereload      = require('gulp-livereload');
 
 // Sass
 gulp.task('sass', function() {
@@ -21,22 +20,15 @@ gulp.task('sass', function() {
         .pipe(minifyCss())
         .pipe(concat('app.min.css'))
         .pipe(gulp.dest('./public/css'))
-        .pipe(reload({
-            stream: true
-        }));
+        .pipe(livereload());
 });
 
-// Static server
-gulp.task('browser-sync', function() {
-    browserSync({
-        server: {
-            baseDir: "./"
-        }
-    });
+gulp.task('server', function() {
+    livereload.listen();
 });
 
 // Developement task
-gulp.task('watch', ['browser-sync', 'sass'], function() {
+gulp.task('watch', ['server', 'sass'], function() {
     gulp.watch('./resources/assets/scss/**/*.scss', ['sass']);
 });
 
